@@ -1,16 +1,45 @@
 ---
-# Check
-- name: Check if homebrew is already installed
+# Check docker
+- name: Check if docker is already installed
   stat: 
-    path: /usr/local/bin/brew
+    path: /usr/local/bin/docker
   register: b
 
 - debug:
-    msg: "Brew already exists"
+    msg: "Docker already exists"
   when: b.stat.exists
 
-# Homebrew install
+# Docker install
 - name: install docker dependencies
-  shell: brew install docker docker-machine docker-compose
+  shell: /usr/local/bin/brew install docker
   when: not b.stat.exists
-  
+
+# Check docker-compose
+- name: Check if docker compose is already installed
+  stat: 
+    path: /usr/local/bin/docker-compose
+  register: c
+
+- debug:
+    msg: "Docker compose already exists"
+  when: c.stat.exists
+
+# Docker compose install
+- name: install docker-compose
+  shell: /usr/local/bin/brew install docker-compose
+  when: not c.stat.exists
+
+# Check docker-machine
+- name: Check if docker machine is already installed
+  stat: 
+    path: /usr/local/bin/docker-machine
+  register: d
+
+- debug:
+    msg: "Docker machine already exists"
+  when: d.stat.exists
+
+# Docker install
+- name: install docker machine dependencies
+  shell: /usr/local/bin/brew install docker-machine
+  when: not d.stat.exists

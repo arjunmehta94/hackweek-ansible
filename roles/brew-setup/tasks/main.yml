@@ -2,7 +2,7 @@
 # Check
 - name: Check if homebrew is already installed
   stat: 
-    path: "{{ bin_path }}/brew"
+    path: /usr/local/bin/brew
   register: b
 
 - debug:
@@ -16,7 +16,7 @@
   when: not b.stat.exists
 
 - name: Update brew
-  shell: brew update
+  shell: /usr/local/bin/brew update
 
 - debug: 
     msg: "Brew updated"

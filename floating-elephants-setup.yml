@@ -8,3 +8,8 @@
   hosts: localhost
   roles:
     - brew-setup
+
+- name: Docker setup
+  hosts: localhost
+  roles:
+    - docker-setup
