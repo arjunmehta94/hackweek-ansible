@@ -2,7 +2,7 @@
 # Check docker
 - name: Check if docker is already installed
   stat: 
-    path: /usr/local/bin/docker
+    path: "{{ bin_path }}/docker"
   register: b
 
 - debug:
@@ -11,13 +11,13 @@
 
 # Docker install
 - name: install docker dependencies
-  shell: /usr/local/bin/brew install docker
+  shell: "{{ bin_path }}/brew install docker"
   when: not b.stat.exists
 
 # Check docker-compose
 - name: Check if docker compose is already installed
   stat: 
-    path: /usr/local/bin/docker-compose
+    path: "{{ bin_path }}/docker-compose"
   register: c
 
 - debug:
@@ -26,13 +26,13 @@
 
 # Docker compose install
 - name: install docker-compose
-  shell: /usr/local/bin/brew install docker-compose
+  shell: "{{ bin_path }}/brew install docker-compose"
   when: not c.stat.exists
 
 # Check docker-machine
 - name: Check if docker machine is already installed
   stat: 
-    path: /usr/local/bin/docker-machine
+    path: "{{ bin_path }}/docker-machine"
   register: d
 
 - debug:
@@ -41,5 +41,5 @@
 
 # Docker install
 - name: install docker machine dependencies
-  shell: /usr/local/bin/brew install docker-machine
+  shell: "{{ bin_path }}/brew install docker-machine"
   when: not d.stat.exists
