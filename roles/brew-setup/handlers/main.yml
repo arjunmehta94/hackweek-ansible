@@ -1,0 +1,7 @@
+---
+- name: Update brew
+  shell: brew update
+
+- debug:
+    msg: "Brew updated"
+    verbosity: 2

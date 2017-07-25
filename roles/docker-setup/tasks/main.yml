@@ -1,0 +1,16 @@
+---
+# Check
+- name: Check if homebrew is already installed
+  stat: 
+    path: /usr/local/bin/brew
+  register: b
+
+- debug:
+    msg: "Brew already exists"
+  when: b.stat.exists
+
+# Homebrew install
+- name: install docker dependencies
+  shell: brew install docker docker-machine docker-compose
+  when: not b.stat.exists
+  
