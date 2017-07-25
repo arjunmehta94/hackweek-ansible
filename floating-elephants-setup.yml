@@ -1,0 +1,15 @@
+---
+
+- hosts: localhost
+  vars:
+    bin_path: /usr/local/bin
+
+- name: Homebrew setup
+  hosts: localhost
+  roles:
+    - brew-setup
+
+- name: Docker setup
+  hosts: localhost
+  roles:
+    - docker-setup
