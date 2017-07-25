@@ -1,5 +1,0 @@
-[all]
-localhost ansible_connection=local
-
-[all:vars]
-bin_path=/usr/local/bin
