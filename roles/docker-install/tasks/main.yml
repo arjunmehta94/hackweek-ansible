@@ -1,7 +1,7 @@
 ---
 # Check docker
 - name: Check if docker is already installed
-  stat: 
+  stat:
     path: /usr/local/bin/docker
   register: b
 
@@ -16,7 +16,7 @@
 
 # Check docker-compose
 - name: Check if docker compose is already installed
-  stat: 
+  stat:
     path: /usr/local/bin/docker-compose
   register: c
 
@@ -31,7 +31,7 @@
 
 # Check docker-machine
 - name: Check if docker machine is already installed
-  stat: 
+  stat:
     path: /usr/local/bin/docker-machine
   register: d
 
@@ -43,3 +43,8 @@
 - name: install docker machine dependencies
   shell: /usr/local/bin/brew install docker-machine
   when: not d.stat.exists
+
+
+
+
+

@@ -6,6 +6,24 @@
     - brew-setup
 
 - name: Docker setup
-  hosts: localhost
+  hosts: all
   roles:
-    - docker-setup
+    - docker-install
+
+- name: Create the docker VM
+  hosts: all
+  vars_prompt:
+    - name: "virtualbox_memory"
+      prompt: "How much memory do you need for your vm? (4096 by default)"
+      default: "4096"
+      private: no
+    - name: "virtualbox_disk_size"
+      prompt: "How much disk size do you need for your vm? (40960 by default)"
+      default: "40960"
+      private: no
+    - name: "machine_name"
+      prompt: "What do you want to call your machine?"
+      default: "dev"
+      private: no
+  roles:
+    - docker-create-vm
