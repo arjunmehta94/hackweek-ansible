@@ -29,3 +29,8 @@
       private: no
   roles:
     - docker-create-vm
+
+- name: Docker setup
+  hosts: all
+  roles:
+    - gradle-setup
