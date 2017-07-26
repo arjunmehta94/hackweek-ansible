@@ -6,7 +6,7 @@
   register: docker_machine_existing
   ignore_errors : yes
 
-- shell: "{{bin_path}}/docker-machine create -d {{bin_path}}/virtualbox --virtualbox-memory={{virtualbox_memory}} --virtualbox-disk-size={{virtualbox_disk_size}} {{machine_name}}"
+- shell: "{{bin_path}}/docker-machine --debug create --driver virtualbox --virtualbox-memory={{virtualbox_memory}} --virtualbox-disk-size={{virtualbox_disk_size}} {{machine_name}}"
   when: docker_machine_existing.stdout != machine_name
 
 - debug:
