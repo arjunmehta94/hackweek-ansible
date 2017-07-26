@@ -12,6 +12,8 @@
 
 - name: Create the docker VM
   hosts: all
+  environment:
+    PATH: /usr/local/bin:{{ ansible_env.PATH }}
   vars_prompt:
     - name: "virtualbox_memory"
       prompt: "How much memory do you need for your vm? (4096 by default)"
