@@ -1,6 +1,6 @@
 ---
 - name: Update brew
-  shell: brew update
+  shell: "{{ bin_path }}/brew update"
 
 - debug:
     msg: "Brew updated"

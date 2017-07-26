@@ -43,3 +43,8 @@
 - name: install docker machine dependencies
   shell: "{{ bin_path }}/brew install docker-machine"
   when: not d.stat.exists
+
+
+
+
+
