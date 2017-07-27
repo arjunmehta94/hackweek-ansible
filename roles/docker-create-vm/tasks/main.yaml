@@ -29,14 +29,22 @@
 - name: Set up a virtual machine with docker on it - configure docker-machine environment
   shell: eval $({{bin_path}}/docker-machine env {{machine_name}})
 
-- name: Check if docker-machine env dev is added to shrc
-  shell: cat {{shrc_path}} | grep 'eval $({{bin_path}}/docker-machine env {{machine_name}})'
-  register: shrc_b
-  ignore_errors: yes
+- name: Evaluate docker environment
+  shell: "{{bin_path}}/docker-machine env {{machine_name}}"
+  args:
+    executable: /bin/bash
+  register: docker_env
+
 
 - name: Add the 'docker-machine env dev' command to shrc
-  shell: echo "eval $({{bin_path}}/docker-machine env {{machine_name}})" >> {{shrc_path}}
-  when: shrc_b.stdout == ""
+  blockinfile:
+    dest: "{{shrc_path}}"
+    block: |
+      {{docker_env.stdout}}
+    marker: '# {mark} ANSIBLE MANAGED BLOCK - docker config'
+    insertbefore: BOF
+    create: yes
+
 
 - debug:
     msg: "Docker machine environment has been set up successfully. Please run 'source {{shrc_path}}' if you are switching to an existing terminal window/tab"
