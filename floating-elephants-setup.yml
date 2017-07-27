@@ -66,3 +66,21 @@
       private: no
   roles:
     - nodejs-setup
+
+- name: Install JDK
+  hosts: all
+  vars_prompt:
+    - name: "javaversion"
+      prompt: "which java version would you like to install?"
+      default: 8
+      private: no
+    - name: "javasubversion"
+      prompt: "which java subversion would you like to install?"
+      default: 131
+      private: no
+  roles:
+    - williamyeh.oracle-java
+    - java-setup
+  vars:
+    java_version: "{{ javaversion }}"
+    java_subversion: "{{ javasubversion }}"

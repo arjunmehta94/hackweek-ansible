@@ -1,0 +1,19 @@
+---
+# Update java home in bashprofile
+
+- name: Check if JAVA_HOME is the correct version
+  shell: cat ~/.bash_profile | grep 'export JAVA_HOME=`/usr/libexec/java_home -v 1.{{ javaversion }}`'
+  register: java_home_output
+
+- name: Export if not available
+  shell: echo 'export JAVA_HOME=`/usr/libexec/java_home -v 1.{{ javaversion }}`' >> ~/.bash_profile
+  when: java_home_output == ''
+
+- name: Source bashprofile
+  shell: source ~/.bash_profile
+  args:
+    executable: /bin/bash
+
+
+
+
