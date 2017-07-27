@@ -1,19 +1,16 @@
 ---
 # Update java home in bashprofile
 
-- name: Check if JAVA_HOME is the correct version
-  shell: cat {{shrc_path}} | grep 'export JAVA_HOME=`/usr/libexec/java_home -v 1.{{ javaversion }}`'
-  register: java_home_output
-
 - name: Export if not available
-  shell: echo 'export JAVA_HOME=`/usr/libexec/java_home -v 1.{{ javaversion }}`' >> {{shrc_path}}
-  when: java_home_output == ''
+  blockinfile:
+    dest: "{{shrc_path}}"
+    block: |
+      export JAVA_HOME=`/usr/libexec/java_home -v 1.{{ javaversion }}`
+    marker: '# {mark} ANSIBLE MANAGED BLOCK - JAVA HOME'
+    insertbefore: BOF
+    create: yes
 
 - name: Source bashprofile
   shell: source {{shrc_path}}
   args:
     executable: /bin/bash
-
-
-
-
