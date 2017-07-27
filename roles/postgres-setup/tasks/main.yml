@@ -1,0 +1,31 @@
+---
+
+- name: Install postgres
+  shell: "{{ bin_path }}/brew install postgresql@{{ postgresversion }}"
+  args:
+    executable: /bin/bash
+
+- name: Unlink current postgres
+  shell: "{{ bin_path}}/brew unlink postgres"
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+- name: Force link to installed version of postgres
+  shell: "{{ bin_path }}/brew link postgresql@{{ postgresversion }} --force"
+  args:
+    executable: /bin/bash
+
+- name: Set PGDATA
+  shell: "PGDATA=/usr/local/var/postgresql@{{ postgresversion }} {{ bin_path }}/initdb -U postgres"
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+- name: Start postgres service
+  shell: "{{ bin_path }}/brew services start postgresql@9.4"
+  args:
+    executable: /bin/bash
+
+- name: Set up trifacta users on your postgres instance
+  shell: "echo 'CREATE USER trifacta SUPERUSER ENCRYPTED PASSWORD 'trifacta'; \n CREATE USER trifactaactiviti SUPERUSER ENCRYPTED PASSWORD 'trifactaactiviti'; \n CREATE USER trifactatimebasedtriggerservice SUPERUSER ENCRYPTED PASSWORD 'trifactatimebasedtriggerservice'; \n CREATE USER trifactaschedulingservice SUPERUSER ENCRYPTED PASSWORD 'trifactaschedulingservice'; \n CREATE USER securetokenservice SUPERUSER ENCRYPTED PASSWORD 'securetokenservice';' | {{ bin_path }}/psql postgres"
