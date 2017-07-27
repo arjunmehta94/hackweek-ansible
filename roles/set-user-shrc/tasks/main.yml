@@ -1,0 +1,5 @@
+---
+
+- name: Set the shrc path to the host
+  set_fact:
+    shrc_path: "{{user_shrc_path}}"

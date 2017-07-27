@@ -29,11 +29,17 @@
 - name: Set up a virtual machine with docker on it - configure docker-machine environment
   shell: eval $({{bin_path}}/docker-machine env {{machine_name}})
 
-- name: Add the 'docker-machine env dev' command to bashrc
-  shell: echo "eval $({{bin_path}}/docker-machine env {{machine_name}})" >> ~/.bashrc
+- name: Check if docker-machine env dev is added to shrc
+  shell: cat {{shrc_path}} | grep 'eval $({{bin_path}}/docker-machine env {{machine_name}})'
+  register: shrc_b
+  ignore_errors: yes
+
+- name: Add the 'docker-machine env dev' command to shrc
+  shell: echo "eval $({{bin_path}}/docker-machine env {{machine_name}})" >> {{shrc_path}}
+  when: shrc_b.stdout == ""
 
 - debug:
-    msg: "Docker machine environment has been set up successfully. Please run 'source ~/.bashrc' if you are switching to an existing terminal window/tab"
+    msg: "Docker machine environment has been set up successfully. Please run 'source {{shrc_path}}' if you are switching to an existing terminal window/tab"
 
 - debug:
     msg: "To test your docker installation, please run 'docker run hello-world' on a separate terminal window"

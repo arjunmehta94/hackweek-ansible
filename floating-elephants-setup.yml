@@ -1,5 +1,27 @@
 ---
 
+- name: Sync with user environment
+  hosts: all
+  roles:
+    - shell-setup
+
+- name: test set_fact
+  hosts: all
+  roles:
+    - test_role
+
+- name: User shrc input input
+  hosts: all
+  vars:
+    - shellt: "{{shell_type}}"
+  vars_prompt:
+    - name: "user_shrc_path"
+      prompt: "Please provide the path for the .shrc file (eg- $HOME/.bashrc or $HOME/zhrc depending on your preference). Press enter/return if you want default"
+      default: "$HOME/.bashrc"
+      private: no
+  roles:
+    - set-user-shrc
+
 - name: Homebrew setup
   hosts: all
   roles:
@@ -16,16 +38,31 @@
     PATH: /usr/local/bin:{{ ansible_env.PATH }}
   vars_prompt:
     - name: "virtualbox_memory"
-      prompt: "How much memory do you need for your vm? (4096 by default)"
+      prompt: "How much memory do you need for your vm? Press enter/return if you want default"
       default: "4096"
       private: no
     - name: "virtualbox_disk_size"
-      prompt: "How much disk size do you need for your vm? (40960 by default)"
+      prompt: "How much disk size do you need for your vm? Press enter/return if you want default"
       default: "40960"
       private: no
     - name: "machine_name"
-      prompt: "What do you want to call your machine?"
+      prompt: "What do you want to call your machine? Press enter/return if you want default"
       default: "dev"
       private: no
   roles:
     - docker-create-vm
+
+- name: Docker setup
+  hosts: all
+  roles:
+    - gradle-setup
+
+- name: Node setup
+  hosts: all
+  vars_prompt:
+    - name: "node_version"
+      prompt: "What version of Node do you want to install? Press enter/return if you want default"
+      default: "6.11.1"
+      private: no
+  roles:
+    - nodejs-setup

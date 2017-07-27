@@ -1,0 +1,21 @@
+---
+# Check
+- name: Check if gradle is installed
+  stat:
+    path: "{{ bin_path }}/gw"
+  register: b
+
+- debug:
+    msg: "Gradle already exists. Please use 'gw' (instead of 'gradle') to keep in sync with the version of gradle we use in the trifacta repository"
+    verbosity: 2
+  when: b.stat.exists
+
+# Gradle install
+- name: install gradle
+  shell: "{{ bin_path }}/brew install gdub"
+  when: not b.stat.exists
+
+- debug:
+    msg: "Gradle installed! Please use 'gw' (instead of 'gradle') to keep in sync with the version of gradle we use in the trifacta repository"
+    verbosity: 2
+  when: not b.stat.exists
