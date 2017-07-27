@@ -29,3 +29,5 @@
 
 - name: Set up trifacta users on your postgres instance
   shell: "echo 'CREATE USER trifacta SUPERUSER ENCRYPTED PASSWORD 'trifacta'; \n CREATE USER trifactaactiviti SUPERUSER ENCRYPTED PASSWORD 'trifactaactiviti'; \n CREATE USER trifactatimebasedtriggerservice SUPERUSER ENCRYPTED PASSWORD 'trifactatimebasedtriggerservice'; \n CREATE USER trifactaschedulingservice SUPERUSER ENCRYPTED PASSWORD 'trifactaschedulingservice'; \n CREATE USER securetokenservice SUPERUSER ENCRYPTED PASSWORD 'securetokenservice';' | {{ bin_path }}/psql postgres"
+  args:
+    executable: /bin/bash
