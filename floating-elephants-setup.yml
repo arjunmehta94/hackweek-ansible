@@ -89,3 +89,13 @@
   hosts: all
   roles:
     - python-setup
+
+- name: Postgres setup
+  hosts: all
+  vars_prompt:
+    - name: "postgresversion"
+      prompt: "what postgres version would you like?"
+      default: 9.4
+      private: no
+  roles:
+    - postgres-setup
