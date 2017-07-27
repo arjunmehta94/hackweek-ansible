@@ -1,0 +1,55 @@
+---
+- name: Remove any existing node installations
+  shell: "{{ bin_path }}/brew uninstall --force node"
+
+- name: Install nvm
+  shell: "{{ bin_path }}/brew install nvm"
+
+- name: Check if nvm directory already exists
+  stat:
+    path: $($HOME)/.nvm
+  register: nvm_b
+
+- name: Make .nvm directory
+  shell: "/bin/mkdir $HOME/.nvm"
+  when: nvm_b.stat.isdir is defined and nvm_b.stat.isdir
+
+- name: Check if shrc is updated
+  shell: cat {{shrc_path}} | grep "export NVM_DIR="$HOME/.nvm""
+  register: shrc_b
+  ignore_errors: yes
+
+- name: Add nvm config to shrc - 1
+  shell: echo "export NVM_DIR="$HOME/.nvm"" >> {{shrc_path}}
+  when: shrc_b.stdout == ""
+
+- name: Check if shrc is updated
+  shell: cat {{shrc_path}} | grep '. "/usr/local/opt/nvm/nvm.sh"'
+  register: shrc_b1
+  ignore_errors: yes
+
+- name: Add nvm config to shrc - 2
+  shell: echo '. "/usr/local/opt/nvm/nvm.sh"' >> {{shrc_path}}
+  when: shrc_b1.stdout == ""
+
+- name: Source the profile in shrc shrc_path
+  shell: "source {{shrc_path}} && nvm install v{{node_version}}"
+  args:
+    executable: /bin/bash
+
+- name: Source the profile in shrc shrc_path
+  shell: "source {{shrc_path}} && nvm alias default v{{node_version}}"
+  args:
+    executable: /bin/bash
+
+# - pause:
+#     seconds: 10
+
+# - name: Install nodejs using nvm
+#   shell: "nvm install v{{node_version}}"
+
+# - name: Set nvm alias
+#   shell: "nvm alias default v{{node_version}}"
+
+- debug:
+    msg: "Node v{{node_version}} has been installed!"

@@ -1,0 +1,7 @@
+---
+
+- debug:
+    msg: "{{shell_type}}"
+
+
+

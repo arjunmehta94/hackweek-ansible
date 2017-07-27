@@ -1,0 +1,12 @@
+---
+
+- name: Grab the shell type
+  shell: echo $SHELL
+  register: shell_type_out
+
+- name: Grab the user shell type
+  set_fact:
+    shell_type: "{{ shell_type_out.stdout | regex_replace('/bin/', '') }}"
+
+
+
