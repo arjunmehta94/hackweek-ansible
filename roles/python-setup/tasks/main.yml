@@ -1,12 +1,28 @@
 ---
 
-- name: Grab the shell type
-  shell: echo $SHELL
-  register: shell_type_out
+- name: Check if Python is already installed
+  stat:
+    path: "{{ bin_path }}/python"
+  register: b
 
-- name: Grab the user shell type
-  set_fact:
-    shell_type: "{{ shell_type_out.stdout | regex_replace('/bin/', '') }}"
+- debug:
+    msg: "Python already exists"
+    verbosity: 2
+  when: b.stat.exists
+
+- name: install python
+  shell: "{{ bin_path }}/brew install python"
+  when: not b.stat.exists
+
+- name: Install Trifacta dependencies
+  shell:
+    "{{bin_path}}/pip install -r {{trifacta_pathf}}/{{trifacta_namef}}/bin/service-supervisor/requirements.txt"
+  args:
+    executable: /bin/bash
+
+- debug:
+    msg: "Python installed with requirements!"
+    verbosity: 2
 
 
 

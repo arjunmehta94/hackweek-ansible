@@ -12,7 +12,8 @@
 
 - name: Make .nvm directory
   shell: "/bin/mkdir $HOME/.nvm"
-  when: nvm_b.stat.isdir is defined and nvm_b.stat.isdir
+  when: nvm_b.stat.isdir is undefined or nvm_b.stat.isdir == False
+  ignore_errors: yes
 
 # - name: Check if shrc is updated
 #   shell: cat {{shrc_path}} | grep "export NVM_DIR="$HOME/.nvm""

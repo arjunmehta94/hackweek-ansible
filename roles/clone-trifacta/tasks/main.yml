@@ -1,0 +1,27 @@
+---
+
+- name: Check if trifacta directory already exists
+  stat:
+    path: "{{trifacta_path}}/{{trifacta_name}}"
+  register: tri_b
+
+- fail:
+    msg: "The path {{trifacta_path}}/{{trifacta_name}} already exists. Please use a different name for your trifacta directory or rename the existing one."
+  when: tri_b.stat.exists is defined and tri_b.stat.exists
+
+- name: clone trifacta
+  shell: "cd {{trifacta_path}} && git clone ssh://git@phab.trifacta.com/diffusion/TF/trifacta.git {{trifacta_name}} && git clone https://github.com/trifacta/floating-elephants.git"
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+- set_fact:
+    trifacta_namef: "{{trifacta_name}}"
+    trifacta_pathf: "{{trifacta_path}}"
+
+
+
+
+
+
+
