@@ -1,0 +1,50 @@
+---
+# Check docker
+- name: Check if docker is already installed
+  stat: 
+    path: "{{ bin_path }}/docker"
+  register: b
+
+- debug:
+    msg: "Docker already exists"
+  when: b.stat.exists
+
+# Docker install
+- name: install docker dependencies
+  shell: "{{ bin_path }}/brew install docker"
+  when: not b.stat.exists
+
+# Check docker-compose
+- name: Check if docker compose is already installed
+  stat: 
+    path: "{{ bin_path }}/docker-compose"
+  register: c
+
+- debug:
+    msg: "Docker compose already exists"
+  when: c.stat.exists
+
+# Docker compose install
+- name: install docker-compose
+  shell: "{{ bin_path }}/brew install docker-compose"
+  when: not c.stat.exists
+
+# Check docker-machine
+- name: Check if docker machine is already installed
+  stat: 
+    path: "{{ bin_path }}/docker-machine"
+  register: d
+
+- debug:
+    msg: "Docker machine already exists"
+  when: d.stat.exists
+
+# Docker install
+- name: install docker machine dependencies
+  shell: "{{ bin_path }}/brew install docker-machine"
+  when: not d.stat.exists
+
+
+
+
+

@@ -14,36 +14,46 @@
   shell: "/bin/mkdir $HOME/.nvm"
   when: nvm_b.stat.isdir is defined and nvm_b.stat.isdir
 
-- name: Check if shrc is updated
-  shell: cat {{shrc_path}} | grep "export NVM_DIR="$HOME/.nvm""
-  register: shrc_b
-  ignore_errors: yes
+# - name: Check if shrc is updated
+#   shell: cat {{shrc_path}} | grep "export NVM_DIR="$HOME/.nvm""
+#   register: shrc_b
+#   ignore_errors: yes
 
-- name: Add nvm config to shrc - 1
-  shell: echo "export NVM_DIR="$HOME/.nvm"" >> {{shrc_path}}
-  when: shrc_b.stdout == ""
+- name: Add Add nvm config to shrc
+  blockinfile:
+    dest: "{{shrc_path}}"
+    block: |
+      export NVM_DIR="$HOME/.nvm"
+      . "/usr/local/opt/nvm/nvm.sh"
+    marker: '# {mark} ANSIBLE MANAGED BLOCK - nvm config'
+    insertbefore: BOF
+    create: yes
 
-- name: Check if shrc is updated
-  shell: cat {{shrc_path}} | grep '. "/usr/local/opt/nvm/nvm.sh"'
-  register: shrc_b1
-  ignore_errors: yes
+# - name: Add nvm config to shrc - 1
+#   shell: echo "export NVM_DIR="$HOME/.nvm"" >> {{shrc_path}}
+#   when: shrc_b.stdout == ""
 
-- name: Add nvm config to shrc - 2
-  shell: echo '. "/usr/local/opt/nvm/nvm.sh"' >> {{shrc_path}}
-  when: shrc_b1.stdout == ""
+# - name: Check if shrc is updated
+#   shell: cat {{shrc_path}} | grep '. "/usr/local/opt/nvm/nvm.sh"'
+#   register: shrc_b1
+#   ignore_errors: yes
+
+# - name: Add nvm config to shrc - 2
+#   shell: echo '. "/usr/local/opt/nvm/nvm.sh"' >> {{shrc_path}}
+#   when: shrc_b1.stdout == ""
 
 - name: Source the profile in shrc shrc_path
-  shell: "source {{shrc_path}} && nvm install v{{node_version}}"
+  shell: "export NVM_DIR=$HOME/.nvm && source /usr/local/opt/nvm/nvm.sh && nvm install v{{node_version}}"
+  args:
+    executable: /bin/bash
+  register: source_out
+
+
+- name: Source the profile in shrc shrc_path
+  shell: "export NVM_DIR=$HOME/.nvm && source /usr/local/opt/nvm/nvm.sh && nvm alias default v{{node_version}}"
   args:
     executable: /bin/bash
 
-- name: Source the profile in shrc shrc_path
-  shell: "source {{shrc_path}} && nvm alias default v{{node_version}}"
-  args:
-    executable: /bin/bash
-
-# - pause:
-#     seconds: 10
 
 # - name: Install nodejs using nvm
 #   shell: "nvm install v{{node_version}}"
@@ -52,4 +62,4 @@
 #   shell: "nvm alias default v{{node_version}}"
 
 - debug:
-    msg: "Node v{{node_version}} has been installed!"
+    msg: "Node v{{node_version}} has been installed! IMPORTANT: To run 'nvm' in your shell, please source your bash file."

@@ -52,7 +52,7 @@
   roles:
     - docker-create-vm
 
-- name: Docker setup
+- name: Gradle setup
   hosts: all
   roles:
     - gradle-setup
@@ -84,3 +84,8 @@
   vars:
     java_version: "{{ javaversion }}"
     java_subversion: "{{ javasubversion }}"
+
+- name: Python setup
+  hosts: all
+  roles:
+    - python-setup
