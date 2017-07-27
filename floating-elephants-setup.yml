@@ -1,9 +1,20 @@
 ---
 
-- name: Sync with user environment
+- name: Set up code-base and environment
   hosts: all
+  vars_prompt:
+    - name: "trifacta_name"
+      prompt: "What do you want to call your trifacta root directory?. Press enter/return if you want default"
+      default: "trifacta"
+      private: no
+    - name: "trifacta_path"
+      prompt: "Where do you want to install trifacta?. Please provide the full path. Press enter/return if you want default"
+      default: "$HOME"
+      private: no
   roles:
+    - clone-trifacta
     - shell-setup
+
 
 - name: test set_fact
   hosts: all
@@ -99,3 +110,8 @@
       private: no
   roles:
     - postgres-setup
+
+- name: Floating elephants setup
+  hosts: all
+  roles:
+    - fl-setup
