@@ -5,14 +5,15 @@
     path: "{{trifacta_path}}/{{trifacta_name}}"
   register: tri_b
 
-- fail:
-    msg: "The path {{trifacta_path}}/{{trifacta_name}} already exists. Please use a different name for your trifacta directory or rename the existing one."
-  when: tri_b.stat.exists is defined and tri_b.stat.exists
+# - fail:
+#     msg: "The path {{trifacta_path}}/{{trifacta_name}} already exists. Please use a different name for your trifacta directory or rename the existing one."
+#   when: tri_b.stat.exists is defined and tri_b.stat.exists
 
 - name: clone trifacta
   shell: "cd {{trifacta_path}} && git clone ssh://git@phab.trifacta.com/diffusion/TF/trifacta.git {{trifacta_name}} && git clone https://github.com/trifacta/floating-elephants.git"
   args:
     executable: /bin/bash
+  when: tri_b.stat.exists is undefined or tri_b.stat.exists == False
   ignore_errors: yes
 
 - set_fact:

@@ -1,11 +1,12 @@
 ---
 # Update java home in bashprofile
+# {{ javaversion }}
 
 - name: Export if not available
   blockinfile:
     dest: "{{shrc_path}}"
     block: |
-      export JAVA_HOME=`/usr/libexec/java_home -v 1.{{ javaversion }}`
+      export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
     marker: '# {mark} ANSIBLE MANAGED BLOCK - JAVA HOME'
     insertbefore: BOF
     create: yes

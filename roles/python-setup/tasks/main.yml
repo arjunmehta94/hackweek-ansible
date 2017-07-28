@@ -19,6 +19,7 @@
     "{{bin_path}}/pip install -r {{trifacta_pathf}}/{{trifacta_namef}}/bin/service-supervisor/requirements.txt"
   args:
     executable: /bin/bash
+  ignore_errors: yes
 
 - debug:
     msg: "Python installed with requirements!"

@@ -27,7 +27,35 @@
   args:
     executable: /bin/bash
 
-- name: Set up trifacta users on your postgres instance
-  shell: "echo 'CREATE USER trifacta SUPERUSER ENCRYPTED PASSWORD 'trifacta'; \n CREATE USER trifactaactiviti SUPERUSER ENCRYPTED PASSWORD 'trifactaactiviti'; \n CREATE USER trifactatimebasedtriggerservice SUPERUSER ENCRYPTED PASSWORD 'trifactatimebasedtriggerservice'; \n CREATE USER trifactaschedulingservice SUPERUSER ENCRYPTED PASSWORD 'trifactaschedulingservice'; \n CREATE USER securetokenservice SUPERUSER ENCRYPTED PASSWORD 'securetokenservice';' | {{ bin_path }}/psql postgres"
+- name: Set up user trifacta
+  shell: "{{ bin_path }}/psql postgres -c 'CREATE USER trifacta SUPERUSER ENCRYPTED PASSWORD 'trifacta';'" 
   args:
     executable: /bin/bash
+  ignore_errors: yes
+
+- name: Set up user trifactaactviti
+  shell: "{{ bin_path }}/psql postgres -c 'CREATE USER trifactaactiviti SUPERUSER ENCRYPTED PASSWORD 'trifactaactiviti';'"
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+
+- name: Set up user trifactatimebasedtriggerservice
+  shell: "{{ bin_path }}/psql postgres -c 'CREATE USER trifactatimebasedtriggerservice SUPERUSER ENCRYPTED PASSWORD 'trifactatimebasedtriggerservice';'"
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+- name: Set up user trifactaschedulingservice
+  shell: "{{ bin_path }}/psql postgres -c 'CREATE USER trifactaschedulingservice SUPERUSER ENCRYPTED PASSWORD 'trifactaschedulingservice';'"
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+
+- name: Set up user securetokenservice
+  shell: "{{ bin_path }}/psql postgres -c 'CREATE USER securetokenservice SUPERUSER ENCRYPTED PASSWORD 'securetokenservice';'"
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+  

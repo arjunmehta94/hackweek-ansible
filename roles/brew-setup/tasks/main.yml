@@ -4,20 +4,49 @@
   stat:
     path: "{{ bin_path }}/brew"
   register: b
+  ignore_errors: yes
 
 - debug:
     msg: "Brew already exists"
     verbosity: 2
-  when: b.stat.exists
 
-# Homebrew install
-- name: install homebrew
-  shell: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  when: not b.stat.exists
+# # Homebrew install
+# - name: install homebrew
+#   shell: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+#   when: not b.stat.exists
+#   become: true
+#   become_method: sudo
 
 - name: Update brew
   shell: "{{ bin_path }}/brew update"
+  args:
+    executable: /bin/bash
 
 - debug:
     msg: "Brew updated"
     verbosity: 2
+
+- name: upgrade brew
+  shell: "{{ bin_path }}/brew upgrade"
+  args:
+    executable: /bin/bash
+
+# - name: tap cask and install brew cask
+#   shell: "{{ bin_path }}/brew tap caskroom/cask && {{ bin_path }}/brew install brew-cask && {{ bin_path }}/brew tap homebrew/versions && {{ bin_path }}/brew tap caskroom/versions"
+#   args:
+#     executable: /bin/bash
+
+# - name: install brew-cask
+#   shell: ""
+#   args:
+#     executable: /bin/bash
+
+# - name: tap homebrew versions
+#   shell: "{{ bin_path }}/brew tap homebrew/versions"
+#   args:
+#     executable: /bin/bash
+
+# - name: tap caskroom versions
+#   shell: "{{ bin_path }}/brew tap caskroom/versions"
+#   args:
+#     executable: /bin/bash

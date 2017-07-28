@@ -2,16 +2,17 @@
 
 # Docker install
 - name: docker setup
-  shell: "{{trifacta_pathf}}/floating-elephants/cloudera/chd5/docker-compose build && {{trifacta_pathf}}/floating-elephants/cloudera/chd5/docker network create -d bridge \
+  command: "{{bin_path}}/docker-compose build  && {{bin_path}}/docker network create -d bridge \
   --subnet=172.20.0.0/16 --gateway 172.20.0.1 --ip-range=172.20.0.0/16 \
-  cdh5-lagoon && {{trifacta_pathf}}/floating-elephants/cloudera/chd5/docker-compose up -d --no-recreate"
+  cdh5-lagoon && {{bin_path}}/docker-compose up -d --no-recreate"
   args:
+    chdir: "{{trifacta_pathf}}/floating-elephants/cloudera/chd5"
     executable: /bin/bash
 
 - name: docker network create
-  shell: "{{trifacta_pathf}}/floating-elephants/cloudera/chd5/docker network create -d bridge \
+  shell: "cd {{trifacta_pathf}}/floating-elephants/cloudera/chd5 && {{bin_path}}/docker network create -d bridge \
   --subnet=172.21.0.0/16 --gateway 172.21.0.1 --ip-range=172.21.0.0/16 \
-  hdp2-lagoo &&"
+  hdp2-lagoon"
 
 - name: docker for OSX
   shell: export DOCKER_HOST_IP=$(docker-machine ip $DOCKER_MACHINE_NAME) && sudo mkdir /etc/resolver && echo "nameserver $DOCKER_HOST_IP" | sudo tee /etc/resolver/cdh5-lagoon && sudo route -n add -net 172.20.0.0 $DOCKER_HOST_IP
